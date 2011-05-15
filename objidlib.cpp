@@ -78,7 +78,7 @@ OBJIDLIB_API BOOL CreateObjectId(LPCWSTR sFileName, POBJECTID_ATTRIBUTE pObjId)
 
 OBJIDLIB_API BOOL GetObjectId(LPCWSTR sFileName, POBJECTID_ATTRIBUTE pObjId)
 {
-  if (NULL != pObjId)
+  if (NULL == pObjId)
   {
     return FALSE; 
   }
