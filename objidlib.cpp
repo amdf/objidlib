@@ -4,6 +4,24 @@
 #include "stdafx.h"
 #include "objidlib.h"
 
+static HANDLE OpenFileForWrite(IN LPCWSTR sFileName, IN BOOL bBackup)
+{
+  return CreateFile(
+    sFileName, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+    (bBackup)
+    ? FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS
+    : FILE_FLAG_OPEN_REPARSE_POINT, 0);
+}
+
+static HANDLE OpenFileForRead(IN LPCWSTR sFileName, IN BOOL bBackup)
+{
+  return CreateFile(
+    sFileName, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING,
+    (bBackup)
+    ? FILE_FLAG_OPEN_REPARSE_POINT | FILE_FLAG_BACKUP_SEMANTICS
+    : FILE_FLAG_OPEN_REPARSE_POINT, 0);
+}
+
 OBJIDLIB_API BOOL ObjectIdExists(LPCWSTR sFileName)
 {
   HANDLE hFile = OpenFileForRead(sFileName,
@@ -29,10 +47,10 @@ OBJIDLIB_API BOOL ObjectIdExists(LPCWSTR sFileName)
 
 OBJIDLIB_API BOOL CreateObjectId(LPCWSTR sFileName, POBJECTID_ATTRIBUTE pObjId)
 {
-  HANDLE hNew = OpenFileForRead(sFileName,
-    (GetFileAttributes(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
   OBJECTID_ATTRIBUTE Obj;
   DWORD dwRet;
+  HANDLE hNew = OpenFileForRead(sFileName,
+    (GetFileAttributes(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
 
   if (hNew == INVALID_HANDLE_VALUE)
   {
@@ -107,5 +125,33 @@ OBJIDLIB_API BOOL DeleteObjectId(LPCWSTR sFileName)
   }
 
   CloseHandle(hDel);
+  return TRUE;
+}
+
+OBJIDLIB_API BOOL SetObjectIdExt(LPCWSTR sFileName, POBJECTID_ATTRIBUTE pObjId)
+{
+  if (NULL == pObjId)
+  {
+    return FALSE;
+  }
+
+  DWORD dwRet;
+  HANDLE hNew = OpenFileForWrite(sFileName,
+    (GetFileAttributes(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
+
+  if (hNew == INVALID_HANDLE_VALUE)
+  {    
+    return FALSE;
+  }  
+
+  if (!DeviceIoControl(hNew,
+     FSCTL_SET_OBJECT_ID_EXTENDED,
+     pObjId->ExtendedInfo, 48, NULL, 0, &dwRet, NULL))
+  {
+    CloseHandle(hNew);
+    return FALSE;
+  }
+
+  CloseHandle(hNew);
   return TRUE;
 }
