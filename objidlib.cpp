@@ -19,7 +19,12 @@ static HANDLE OpenFileForRead(IN LPCWSTR sFileName, IN BOOL bBackup)
     : FILE_FLAG_OPEN_REPARSE_POINT, 0);
 }
 
-OBJIDLIB_API BOOL ObjectIdExists(LPCWSTR sFileName)
+/**
+ *  @brief      Checks an existence of an object id of a specified file
+ *  @param[in]  sFileName File name
+ *  @return     TRUE if exists, FALSE otherwise
+ */
+OBJIDLIB_API BOOL ObjectIdExists(IN LPCWSTR sFileName)
 {
   HANDLE hFile = OpenFileForRead(sFileName,
     (GetFileAttributes(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
@@ -42,7 +47,14 @@ OBJIDLIB_API BOOL ObjectIdExists(LPCWSTR sFileName)
   return TRUE;
 }
 
-OBJIDLIB_API BOOL CreateObjectId(LPCWSTR sFileName, POBJECTID_ATTRIBUTE pObjId)
+/**
+ *  @brief      Request a system to create a new object id in a specified file
+ *  @param[in]  sFileName File name
+ *  @param[out] pObjId Pointer to a buffer receiving a content of a new object id.
+ *              If this parameter is NULL, it is ignored.
+ *  @return     TRUE if success, FALSE otherwise
+ */
+OBJIDLIB_API BOOL CreateObjectId(IN LPCWSTR sFileName, OUT POBJECTID_ATTRIBUTE pObjId)
 {
   OBJECTID_ATTRIBUTE Obj;
   DWORD dwRet;
@@ -73,7 +85,14 @@ OBJIDLIB_API BOOL CreateObjectId(LPCWSTR sFileName, POBJECTID_ATTRIBUTE pObjId)
   return TRUE;
 }
 
-OBJIDLIB_API BOOL GetObjectId(LPCWSTR sFileName, POBJECTID_ATTRIBUTE pObjId)
+/**
+ *  @brief      Get a contents of an object id of a specified file
+ *  @param[in]  sFileName File name
+ *  @param[out] pObjId Pointer to a buffer receiving a content of a new object id.
+ *              If this parameter is NULL, it is ignored.
+ *  @return     TRUE if success, FALSE otherwise
+ */
+OBJIDLIB_API BOOL GetObjectId(IN LPCWSTR sFileName, OUT POBJECTID_ATTRIBUTE pObjId)
 {
   if (NULL == pObjId)
   {
@@ -102,7 +121,12 @@ OBJIDLIB_API BOOL GetObjectId(LPCWSTR sFileName, POBJECTID_ATTRIBUTE pObjId)
   return TRUE;
 }
 
-OBJIDLIB_API BOOL DeleteObjectId(LPCWSTR sFileName)
+/**
+ *  @brief      Delete an object id of a specified file
+ *  @param[in]  sFileName File name
+ *  @return     TRUE if success, FALSE otherwise
+ */
+OBJIDLIB_API BOOL DeleteObjectId(IN LPCWSTR sFileName)
 {
   HANDLE hDel = OpenFileForWrite(sFileName,
     (GetFileAttributes(sFileName) & FILE_ATTRIBUTE_DIRECTORY));
@@ -125,7 +149,14 @@ OBJIDLIB_API BOOL DeleteObjectId(LPCWSTR sFileName)
   return TRUE;
 }
 
-OBJIDLIB_API BOOL SetObjectIdExt(LPCWSTR sFileName, POBJECTID_ATTRIBUTE pObjId)
+/**
+ *  @brief      Set an extended part of an object id of a specified file
+ *  @param[in]  sFileName File name
+ *  @param[in]  pObjId An OBJECTID_ATTRIBUTE structure containing an extended part.
+ *              ObjectId member is ignored.
+ *  @return     TRUE if success, FALSE otherwise
+ */
+OBJIDLIB_API BOOL SetObjectIdExt(IN LPCWSTR sFileName, IN POBJECTID_ATTRIBUTE pObjId)
 {
   if (NULL == pObjId)
   {
