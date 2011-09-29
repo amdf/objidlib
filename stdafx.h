@@ -1,11 +1,15 @@
 /*! \mainpage ObjIdLib
  *
- * A library for working with NTFS Object Idenitifers
+ * ObjIdLib is a Windows dynamic link library for working with NTFS Object Idenitifers.
  *
- * \section usage_sec Using
+ * \section bin_sec Binary
  *
- * ObjIdLib is a dynamic link library for Windows applications.
- * File name is objidlib.dll.
+ * You can download ObjIdLib at http://hex.pp.ua/files/objidlib-0.1.rar
+ * The package contains 32-bit and 64-bit files <b>objidlib.dll</b> and <b>objidlib.lib</b>,
+ * a source code and a copy of this html help.
+ *
+ * \section src_sec Source
+ * Latest source code is available at http://github.com/amdf/objidlib
  */
 #pragma once
 

@@ -1,3 +1,10 @@
+/** @file     objidlib.cpp
+ *  @brief    A library for working with NTFS Object Idenitifers
+ *  @author   amdf
+ *  @version  0.1
+ *  @date     May 2011
+ */
+
 #include "stdafx.h"
 #include "objidlib.h"
 
