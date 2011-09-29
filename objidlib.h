@@ -2,8 +2,8 @@
  *  @brief    A header file of a library for
  *            working with NTFS Object Idenitifers
  *  @author   amdf
- *  @version  0.1
- *  @date     May 2011
+ *  @version  0.2
+ *  @date     September 2011
  */
 
 #ifdef OBJIDLIB_EXPORTS
@@ -56,4 +56,5 @@ OBJIDLIB_API BOOL CreateObjectId(IN LPCWSTR sFileName, OUT POBJECTID_ATTRIBUTE p
 OBJIDLIB_API BOOL GetObjectId(IN LPCWSTR sFileName, OUT POBJECTID_ATTRIBUTE pObjId);
 OBJIDLIB_API BOOL ObjectIdExists(IN LPCWSTR sFileName);
 OBJIDLIB_API BOOL DeleteObjectId(IN LPCWSTR sFileName);
+OBJIDLIB_API BOOL SetObjectId(IN LPCWSTR sFileName, IN POBJECTID_ATTRIBUTE pObjId);
 OBJIDLIB_API BOOL SetObjectIdExt(IN LPCWSTR sFileName, IN POBJECTID_ATTRIBUTE pObjId);

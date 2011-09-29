@@ -4,7 +4,7 @@
  *
  * \section bin_sec Binary
  *
- * You can download ObjIdLib at http://hex.pp.ua/files/objidlib-0.1.rar
+ * You can download ObjIdLib at http://hex.pp.ua/files/objidlib-0.2.rar
  * The package contains 32-bit and 64-bit files <b>objidlib.dll</b> and <b>objidlib.lib</b>,
  * a source code and a copy of this html help.
  *

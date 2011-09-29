@@ -1,8 +1,8 @@
 /** @file     objidlib.cpp
  *  @brief    A library for working with NTFS Object Idenitifers
  *  @author   amdf
- *  @version  0.1
- *  @date     May 2011
+ *  @version  0.2
+ *  @date     September 2011
  */
 
 #include "stdafx.h"
@@ -157,6 +157,40 @@ OBJIDLIB_API BOOL DeleteObjectId(IN LPCWSTR sFileName)
 }
 
 /**
+ *  @brief      Set an object id of a specified file. SE_RESTORE_PRIVILEGE required.
+ *  @param[in]  sFileName File name
+ *  @param[in]  pObjId An OBJECTID_ATTRIBUTE structure.
+ *  @return     TRUE if success, FALSE otherwise
+ */
+OBJIDLIB_API BOOL SetObjectId(IN LPCWSTR sFileName, IN POBJECTID_ATTRIBUTE pObjId)
+{
+  if (NULL == pObjId)
+  {
+    return FALSE;
+  }
+
+  DWORD dwRet;
+  HANDLE hNew = CreateFile(sFileName, GENERIC_WRITE, FILE_SHARE_WRITE, 
+    NULL, OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, 0);
+
+  if (hNew == INVALID_HANDLE_VALUE)
+  {    
+    return FALSE;
+  }  
+
+  if (!DeviceIoControl(hNew,
+     FSCTL_SET_OBJECT_ID,
+     pObjId, sizeof(OBJECTID_ATTRIBUTE), NULL, 0, &dwRet, NULL))
+  {
+    CloseHandle(hNew);
+    return FALSE;
+  }
+
+  CloseHandle(hNew);
+  return TRUE;
+}
+
+/**
  *  @brief      Set an extended part of an object id of a specified file
  *  @param[in]  sFileName File name
  *  @param[in]  pObjId An OBJECTID_ATTRIBUTE structure containing an extended part.
@@ -181,7 +215,7 @@ OBJIDLIB_API BOOL SetObjectIdExt(IN LPCWSTR sFileName, IN POBJECTID_ATTRIBUTE pO
 
   if (!DeviceIoControl(hNew,
      FSCTL_SET_OBJECT_ID_EXTENDED,
-     pObjId->ExtendedInfo, 48, NULL, 0, &dwRet, NULL))
+     pObjId->ExtendedInfo, sizeof(pObjId->ExtendedInfo), NULL, 0, &dwRet, NULL))
   {
     CloseHandle(hNew);
     return FALSE;
